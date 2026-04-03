@@ -14,6 +14,7 @@ import (
 
 	"github.com/google/go-github/v69/github"
 	"github.com/spf13/cobra"
+	"github.com/tinybluerobots/issuebot/internal/cache"
 	"github.com/tinybluerobots/issuebot/internal/config"
 	"github.com/tinybluerobots/issuebot/internal/notify"
 	"github.com/tinybluerobots/issuebot/internal/poller"
@@ -99,7 +100,9 @@ func runWatch(cmd *cobra.Command, args []string) error {
 	}
 
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
-	ghClient := github.NewClient(oauth2.NewClient(context.Background(), ts))
+	oauthClient := oauth2.NewClient(context.Background(), ts)
+	oauthClient.Transport = &cache.Transport{Base: oauthClient.Transport}
+	ghClient := github.NewClient(oauthClient)
 
 	// Resolve repo from current dir if needed
 	if cfg.Org == "" && cfg.Repo == "" {

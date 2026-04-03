@@ -29,8 +29,8 @@ func TestParseIssueConfig_Empty(t *testing.T) {
 	body := "Just a normal issue body with no config block."
 
 	cfg := ParseIssueConfig(body)
-	assert.Equal(t, "", cfg.Strategy)
-	assert.Equal(t, "", cfg.Branch)
+	assert.Empty(t, cfg.Strategy)
+	assert.Empty(t, cfg.Branch)
 }
 
 func TestParseIssueConfig_PartialFields(t *testing.T) {
@@ -40,7 +40,7 @@ strategy: worktree
 
 	cfg := ParseIssueConfig(body)
 	assert.Equal(t, "worktree", cfg.Strategy)
-	assert.Equal(t, "", cfg.Branch)
+	assert.Empty(t, cfg.Branch)
 }
 
 func TestParseIssueConfig_UnknownKeysIgnored(t *testing.T) {
@@ -86,7 +86,7 @@ strategy: [broken
 -->`
 
 	cfg := ParseIssueConfig(body)
-	assert.Equal(t, "", cfg.Strategy)
+	assert.Empty(t, cfg.Strategy)
 }
 
 func TestDefaultConfig_WorkspaceUsesHomeDir(t *testing.T) {
@@ -128,5 +128,5 @@ func TestParseIssueConfig_PostCommand(t *testing.T) {
 func TestParseIssueConfig_PostCommandEmpty(t *testing.T) {
 	body := "<!-- issuebot\nstrategy: pr\n-->"
 	cfg := ParseIssueConfig(body)
-	assert.Equal(t, "", cfg.PostCommand)
+	assert.Empty(t, cfg.PostCommand)
 }
